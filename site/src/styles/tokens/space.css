@@ -1,0 +1,42 @@
+/* 2. Space — внутренние отступы компонентов.
+
+   Все значения текучие: прямая от 360 до 1440, дальше та же прямая
+   продолжается до 1920 и там упирается в потолок clamp. Число из макета
+   (колонка 1440) лежит на этой прямой ровно, без округления.
+
+   Мелкие шаги (4/8/12/16) не текут: отступ в 4 px, ужатый до 3, — это
+   не адаптив, а дрожание. Текучесть начинается с 24.
+
+           360    1440    1920
+   3xs       4       4       4
+   2xs       8       8       8
+   xs       12      12      12
+   md       16      16      16
+   lg       20      24      26
+   xl       24      32      36
+   2xl      28      40      45
+   3xl      32      48      55
+   4xl      36      56      65
+   5xl      40      64      75
+   6xl      48      80      94
+   7xl      56      96     114
+   8xl      72     128     153
+   9xl      88     160     192
+   10xl    112     224     274                                        */
+:root {
+  --space-3xs: 0.25rem;
+  --space-2xs: 0.5rem;
+  --space-xs: 0.75rem;
+  --space-md: 1rem;
+  --space-lg: clamp(1.25rem, calc(1.1667rem + 0.3704vw), 1.6125rem);
+  --space-xl: clamp(1.5rem, calc(1.3333rem + 0.7407vw), 2.225rem);
+  --space-2xl: clamp(1.75rem, calc(1.5rem + 1.1111vw), 2.8312rem);
+  --space-3xl: clamp(2rem, calc(1.6667rem + 1.4815vw), 3.4438rem);
+  --space-4xl: clamp(2.25rem, calc(1.8333rem + 1.8519vw), 4.0563rem);
+  --space-5xl: clamp(2.5rem, calc(2rem + 2.2222vw), 4.6688rem);
+  --space-6xl: clamp(3rem, calc(2.3333rem + 2.963vw), 5.8875rem);
+  --space-7xl: clamp(3.5rem, calc(2.6667rem + 3.7037vw), 7.1125rem);
+  --space-8xl: clamp(4.5rem, calc(3.3333rem + 5.1852vw), 9.5563rem);
+  --space-9xl: clamp(5.5rem, calc(4rem + 6.6667vw), 12rem);
+  --space-10xl: clamp(7rem, calc(4.6667rem + 10.3704vw), 17.1125rem);
+}

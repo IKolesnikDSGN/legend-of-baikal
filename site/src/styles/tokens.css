@@ -1,0 +1,14 @@
+/* Дизайн-система: единственная точка входа. Порядок важен — theme.css
+   ссылается на примитивы, section.css считает --anti-margin из --margin.
+
+   Правило одно: компонент берёт токены и ничего кроме токенов. Сырое
+   число в компоненте не переживёт ни смены темы, ни правки макета —
+   и не сообщит об этом ошибкой, просто разъедется. */
+@import '@fontsource-variable/manrope';
+
+@import './tokens/primitive.css'; /* 0. Primitive  — сырые цвета        */
+@import './tokens/theme.css'; /*     1. Theme      — light/brand/accent */
+@import './tokens/space.css'; /*     2. Space      — отступы, текучие   */
+@import './tokens/radius.css'; /*    3. Radius     — скругления         */
+@import './tokens/section.css'; /*   4. Section    — поля и ритм секций */
+@import './tokens/type.css'; /*      5–7. Type     — кегль, вес, гарнитура */

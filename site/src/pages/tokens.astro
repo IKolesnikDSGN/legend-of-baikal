@@ -1,0 +1,498 @@
+---
+// Витрина токенов. Единственный способ увидеть систему целиком и поймать
+// разъехавшуюся ступень: числа читаются из вычисленных стилей браузера,
+// а не дублируются в разметке. Страница попадает в сборку — если её
+// не должно быть на проде, удалить файл.
+import '../styles/global.css';
+
+const PRIMITIVES = [
+  ['white', 'white-600', 'white-500', 'white-400', 'white-300', 'white-200', 'white-100', 'white-50'],
+  ['dark-blue', 'dark-blue-600', 'dark-blue-500', 'dark-blue-300', 'dark-blue-200', 'dark-blue-100', 'dark-blue-50'],
+  ['paper', 'blue', 'coral-800', 'coral', 'coral-500'],
+];
+
+const THEME_KEYS = [
+  'bg',
+  'surface',
+  'fg',
+  'fg-highlights',
+  'muted',
+  'muted-secondary',
+  'muted-tertiary',
+  'border',
+  'accent',
+  'accent-contrast',
+];
+const THEMES = ['light', 'brand', 'accent'];
+
+const SPACE = [
+  'space-3xs', 'space-2xs', 'space-xs', 'space-md', 'space-lg', 'space-xl',
+  'space-2xl', 'space-3xl', 'space-4xl', 'space-5xl', 'space-6xl',
+  'space-7xl', 'space-8xl', 'space-9xl', 'space-10xl',
+];
+
+const RADIUS = ['radius-sm', 'radius-md', 'radius-pill'];
+
+const SECTION = [
+  'margin', 'anti-margin', 'gutter',
+  'section-none', 'section-even', 'section-sm', 'section-md', 'section-lg', 'section-pt',
+];
+
+// [класс стиля, токен кегля, токен интерлиньяжа, токен трекинга]
+const HEADINGS = [
+  ['display', 'h-4xl', 'lh-display', 'ls-display'],
+  ['h1', 'h-3xl', 'lh-h1', 'ls-h1'],
+  ['h2', 'h-2xl', 'lh-h2', 'ls-h2'],
+  ['h3', 'h-xl', 'lh-h3', 'ls-h3'],
+  ['h4', 'h-lg', 'lh-h4', 'ls-h4'],
+  ['h5', 'h-md', 'lh-h5', 'ls-h5'],
+  ['h6', 'h-sm', 'lh-h6', 'ls-h6'],
+];
+const PARAGRAPHS = [
+  ['text-xl', 'p-xl', 'lh-text', 'ls-text'],
+  ['text-lg', 'p-lg', 'lh-text', 'ls-text-lg'],
+  ['text-md', 'p-md', 'lh-text', 'ls-text'],
+  ['text-sm', 'p-sm', 'lh-text', 'ls-text'],
+];
+const EYEBROWS = [
+  ['eyebrow-md', 'e-md', 'lh-eyebrow', 'ls-eyebrow'],
+  ['eyebrow-sm', 'e-sm', 'lh-eyebrow', 'ls-eyebrow'],
+  ['eyebrow-xs', 'e-xs', 'lh-eyebrow', 'ls-eyebrow'],
+];
+const WEIGHTS = [
+  ['weight-regular', 'Regular'],
+  ['weight-medium', 'Medium'],
+  ['weight-semibold', 'SemiBold'],
+];
+---
+
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Токены — Легенда озера Байкал</title>
+    <meta name="robots" content="noindex" />
+  </head>
+  <body data-theme="light">
+    <div class="page u-container">
+      <header class="head">
+        <p class="u-text-style-eyebrow-sm">Дизайн-система</p>
+        <h1 class="u-text-style-h2">Токены</h1>
+        <p class="u-text-style-text-md note">
+          Значения читаются из вычисленных стилей: ширина окна —
+          <b data-vw>—</b> px. Текучие токены меняются вместе с ней.
+        </p>
+      </header>
+
+      <section class="group">
+        <h2 class="u-text-style-h4">0. Primitive</h2>
+        {PRIMITIVES.map((row) => (
+          <div class="swatches">
+            {row.map((name) => (
+              <figure class="swatch">
+                <div class="chip" style={`background: var(--${name})`}></div>
+                <figcaption>
+                  <span class="u-text-style-text-sm">{name}</span>
+                  <span class="u-text-style-text-sm val" data-token={name}>—</span>
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+        ))}
+      </section>
+
+      <section class="group">
+        <h2 class="u-text-style-h4">1. Theme</h2>
+        <div class="themes">
+          {THEMES.map((theme) => (
+            <div class="theme-card" data-theme={theme}>
+              <p class="u-text-style-eyebrow-xs">{theme}</p>
+              {THEME_KEYS.map((key) => (
+                <div class="theme-row">
+                  <span class="chip chip-sm" style={`background: var(--${key})`}></span>
+                  <span class="u-text-style-text-sm">{key}</span>
+                </div>
+              ))}
+              <div class="theme-demo">
+                <p class="u-text-style-h5">Заголовок</p>
+                <p class="u-text-style-text-md" style="color: var(--muted)">Приглушённый текст</p>
+                <button class="btn" type="button">Кнопка</button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section class="group">
+        <h2 class="u-text-style-h4">2. Space</h2>
+        <ul class="bars">
+          {SPACE.map((name) => (
+            <li>
+              <span class="u-text-style-text-sm nm">{name}</span>
+              <span class="bar" style={`width: var(--${name})`}></span>
+              <span class="u-text-style-text-sm val" data-token={name}>—</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section class="group">
+        <h2 class="u-text-style-h4">3. Radius</h2>
+        <div class="swatches">
+          {RADIUS.map((name) => (
+            <figure class="swatch">
+              <div class="chip radius-chip" style={`border-radius: var(--${name})`}></div>
+              <figcaption>
+                <span class="u-text-style-text-sm">{name}</span>
+                <span class="u-text-style-text-sm val" data-token={name}>—</span>
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+      </section>
+
+      <section class="group">
+        <h2 class="u-text-style-h4">4. Section</h2>
+        <ul class="bars">
+          {SECTION.map((name) => (
+            <li>
+              <span class="u-text-style-text-sm nm">{name}</span>
+              <span class="bar" style={`width: max(0px, var(--${name}))`}></span>
+              <span class="u-text-style-text-sm val" data-token={name}>—</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section class="group">
+        <h2 class="u-text-style-h4">5. Type Size — стили целиком</h2>
+        <ul class="type">
+          {[
+            [HEADINGS, 'Легенда озера Байкал'],
+            [PARAGRAPHS, 'Шесть легенд байкальского берега: маяк, дорога, эпишура, звон над водой.'],
+            [EYEBROWS, 'Надзаголовок секции'],
+          ].map(([rows, sample]) =>
+            (rows as string[][]).map(([style, size, lh, ls]) => (
+              <li>
+                <span class="u-text-style-text-sm nm">
+                  <b>{style}</b>
+                  <span class="val">
+                    {size} · <span data-token={size}>—</span>
+                  </span>
+                  <span class="val">
+                    lh <span data-token={lh}>—</span> · ls <span data-token={ls}>—</span>
+                  </span>
+                </span>
+                <span class={`u-text-style-${style}`}>{sample}</span>
+              </li>
+            ))
+          )}
+        </ul>
+      </section>
+
+      <section class="group">
+        <h2 class="u-text-style-h4">6–7. Type Weight / Family</h2>
+        <ul class="type">
+          {WEIGHTS.map(([name, label]) => (
+            <li>
+              <span class="u-text-style-text-sm nm">{label}<span class="val" data-token={name}>—</span></span>
+              <span class="u-text-style-h5" style={`font-weight: var(--${name})`}>
+                Manrope — Легенда озера Байкал 0123456789
+              </span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section class="group">
+        <h2 class="u-text-style-h4">8. Утилиты</h2>
+
+        <h3 class="u-text-style-h6">u-grid-12 · u-col-span-* · u-col-start-*</h3>
+        <div class="u-grid-12 grid-demo">
+          {Array.from({ length: 12 }, (_, i) => (
+            <span class="u-col-span-1 cell u-text-style-text-sm u-alignment-center">{i + 1}</span>
+          ))}
+          <span class="u-col-span-8 cell u-text-style-text-sm u-alignment-center">col-span-8</span>
+          <span class="u-col-span-4 cell u-text-style-text-sm u-alignment-center">span-4</span>
+          <span class="u-col-span-6 u-col-start-4 cell u-text-style-text-sm u-alignment-center">
+            span-6 · start-4
+          </span>
+        </div>
+
+        <h3 class="u-text-style-h6">u-flex · u-gap-* · u-justify-* · u-align-*</h3>
+        <div class="u-flex u-gap-md u-align-center u-justify-between flex-demo">
+          <span class="u-text-style-text-md">start</span>
+          <span class="u-text-style-h5">center</span>
+          <span class="u-text-style-text-sm u-text-secondary">end</span>
+        </div>
+
+        <h3 class="u-text-style-h6">Что есть</h3>
+        <ul class="families">
+          {[
+            ['u-text-style-*', 'display, h1…h6, text-xl…text-sm, eyebrow-md…xs'],
+            ['u-weight-*', 'regular, medium, semibold'],
+            ['u-transform-*', 'uppercase, lowercase, capitalize, none'],
+            ['u-alignment-*', 'left, center, right, justify'],
+            ['u-text-*', 'main, highlights, muted, secondary, tertiary, accent'],
+            ['u-bg-*', 'main, surface, accent'],
+            ['u-radius-*', 'sm, md, pill'],
+            ['u-container / u-bleed', 'поля страницы и выход за них'],
+            ['u-spacer-top-* / u-spacer-btm-*', 'none, even, sm, md, lg, pt'],
+            ['u-padding-* / -inline-* / -block-*', 'вся шкала space'],
+            ['u-gap-* / u-gap-row-* / u-gap-col-*', 'вся шкала space'],
+            ['u-grid-12', '12 колонок, межколонник --gutter'],
+            ['u-col-span-* / u-col-start-*', '1…12'],
+            ['u-row-span-* / u-row-start-*', '1…6'],
+            ['u-flex / u-flex-col / u-flex-wrap', 'режим раскладки'],
+            ['u-align-*', 'start, center, end, stretch, baseline'],
+            ['u-justify-*', 'start, center, end, between, around, evenly'],
+            ['u-visually-hidden', 'скрыто визуально, доступно скринридеру'],
+          ].map(([name, vals]) => (
+            <li>
+              <b class="u-text-style-text-md">{name}</b>
+              <span class="u-text-style-text-sm u-text-muted">{vals}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+    </div>
+
+    <script>
+      // Значения берутся у реального узла: у section-токенов внутри
+      // медиазапроса и у тем внутри data-theme они разные, и подпись
+      // обязана показывать то же, что видит рендер.
+      //
+      // clamp разрешается в пиксели через ширину временного узла —
+      // браузер считает сам. getPropertyValue вернул бы исходный
+      // clamp(...) строкой, а нужен результат.
+      const probe = document.createElement('div');
+      probe.style.cssText = 'position:absolute;visibility:hidden;height:0';
+      document.body.appendChild(probe);
+
+      const resolve = () => {
+        document.querySelectorAll<HTMLElement>('[data-token]').forEach((el) => {
+          const name = el.dataset.token!;
+          const host = el.closest<HTMLElement>('[data-theme]') ?? document.documentElement;
+          const raw = getComputedStyle(host).getPropertyValue(`--${name}`).trim();
+          if (!raw) { el.textContent = '—'; return; }
+          if (raw.startsWith('#') || raw.startsWith('rgb')) { el.textContent = raw; return; }
+          // Интерлиньяж без единиц и трекинг в em показываются как есть:
+          // в пикселях они зависят от кегля узла и смысла не несут.
+          if (/^-?[\d.]+(em)?$/.test(raw)) { el.textContent = raw; return; }
+          // width не бывает отрицательной, поэтому у --anti-margin
+          // меряется модуль, а знак дописывается.
+          const neg = name.startsWith('anti-');
+          probe.style.width = neg ? `calc(${raw} * -1)` : raw;
+          const px = Math.round(parseFloat(getComputedStyle(probe).width) * 10) / 10;
+          el.textContent = `${neg ? '−' : ''}${px} px`;
+        });
+        const vw = document.querySelector('[data-vw]');
+        if (vw) vw.textContent = String(Math.round(window.innerWidth));
+      };
+
+      resolve();
+      addEventListener('resize', resolve);
+    </script>
+
+    <style>
+      body {
+        background: var(--bg);
+        color: var(--fg);
+      }
+
+      .page {
+        /* ширину и поля держит u-container из утилит */
+        padding-block: var(--section-md);
+        display: flex;
+        flex-direction: column;
+        gap: var(--section-sm);
+      }
+
+      .head {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-xs);
+      }
+      .note {
+        color: var(--muted);
+      }
+
+      .group {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-xl);
+        padding-top: var(--space-2xl);
+        border-top: 1px solid var(--muted-tertiary);
+      }
+
+      .swatches {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--space-md);
+      }
+      .swatch {
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-2xs);
+      }
+      .chip {
+        width: 6rem;
+        height: 4rem;
+        border-radius: var(--radius-sm);
+        border: 1px solid var(--muted-tertiary);
+        /* шахматка под полупрозрачными ступенями — иначе 8% и 16%
+           неотличимы от фона */
+        background-image: linear-gradient(45deg, #0002 25%, transparent 25%),
+          linear-gradient(-45deg, #0002 25%, transparent 25%),
+          linear-gradient(45deg, transparent 75%, #0002 75%),
+          linear-gradient(-45deg, transparent 75%, #0002 75%);
+        background-size: 12px 12px;
+        background-position: 0 0, 0 6px, 6px -6px, -6px 0;
+      }
+      .radius-chip {
+        background: var(--fg);
+        width: 7rem;
+      }
+      /* Вертикальный trim снимает полуинтерлиньяж, поэтому строки,
+         стоящие стопкой, разводятся gap-ом, а не «само получится». */
+      figcaption {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-3xs);
+      }
+      .val {
+        color: var(--muted-secondary);
+      }
+
+      .themes {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+        gap: var(--space-md);
+      }
+      .theme-card {
+        padding: var(--space-lg);
+        border-radius: var(--radius-md);
+        border: 1px solid var(--border);
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-2xs);
+      }
+      .theme-row {
+        display: flex;
+        align-items: center;
+        gap: var(--space-2xs);
+      }
+      .chip-sm {
+        width: 1.5rem;
+        height: 1.5rem;
+        flex: none;
+        background-size: 8px 8px;
+      }
+      .theme-demo {
+        margin-top: var(--space-md);
+        padding: var(--space-md);
+        border-radius: var(--radius-sm);
+        background: var(--surface);
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-2xs);
+        align-items: flex-start;
+      }
+      .btn {
+        margin-top: var(--space-2xs);
+        padding: var(--space-2xs) var(--space-md);
+        border: 0;
+        border-radius: var(--radius-pill);
+        background: var(--accent);
+        color: var(--accent-contrast);
+        font: inherit;
+        font-size: var(--p-md);
+        font-weight: var(--weight-medium);
+        cursor: pointer;
+      }
+
+      .bars {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-2xs);
+      }
+      .bars li {
+        display: flex;
+        align-items: center;
+        gap: var(--space-md);
+      }
+      .nm {
+        flex: none;
+        width: 9rem;
+        color: var(--muted);
+        display: flex;
+        justify-content: space-between;
+        gap: var(--space-2xs);
+      }
+      .bar {
+        height: 0.75rem;
+        flex: none;
+        border-radius: var(--radius-pill);
+        background: var(--accent);
+      }
+
+      .type {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-lg);
+      }
+      .type li {
+        display: flex;
+        align-items: baseline;
+        gap: var(--space-lg);
+      }
+      .type .nm {
+        width: 11rem;
+        flex-direction: column;
+        justify-content: flex-start;
+        gap: var(--space-3xs);
+      }
+      .type .nm b {
+        color: var(--fg);
+        font-weight: var(--weight-semibold);
+      }
+
+      .grid-demo,
+      .flex-demo {
+        padding: var(--space-md);
+        border-radius: var(--radius-sm);
+        background: var(--surface);
+      }
+      .cell {
+        padding-block: var(--space-2xs);
+        border-radius: var(--radius-sm);
+        background: var(--muted-tertiary);
+      }
+      .families {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-2xs);
+      }
+      .families li {
+        display: flex;
+        gap: var(--space-md);
+      }
+      .families b {
+        flex: none;
+        width: 18rem;
+        font-weight: var(--weight-semibold);
+      }
+    </style>
+  </body>
+</html>

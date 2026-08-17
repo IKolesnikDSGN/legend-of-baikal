@@ -1,0 +1,7 @@
+# Что не едет в деплой. Сборку Vercel делает у себя, замеры и снимки — наши.
+dist/
+node_modules/
+.astro/
+shots/
+scripts/
+.DS_Store

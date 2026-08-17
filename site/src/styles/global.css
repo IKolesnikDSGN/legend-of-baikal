@@ -1,0 +1,115 @@
+/* Порядок слоёв решает всё, что раньше решала специфичность: утилита
+   бьёт базовый стиль тега, не будучи !important, а стили компонентов
+   Astro лежат вне слоёв и бьют оба — на то они и локальные. */
+@layer tokens, base, utilities;
+
+@import '@fontsource-variable/manrope';
+@import './tokens.css' layer(tokens);
+@import './kv.css' layer(tokens);
+@import './utilities.css' layer(utilities);
+/* Дивайдер: один класс на все шесть блоков, где он стоит. Пара отбивок обязана
+   жить один раз — своя в каждом компоненте разъезжается молча. */
+@import './rule.css' layer(utilities);
+/* ВРЕМЕННО, вместе с фотографиями-заглушками (`src/lib/photos.ts`): бокс кадра
+   и его параллакс за прокруткой. Уйдёт тем же движением, что и заглушки. */
+@import './photos.css' layer(utilities);
+
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    /* Lenis ведёт инерцию сам; нативный smooth с ним конфликтует */
+    scrollbar-width: thin;
+
+    color-scheme: dark;
+  }
+
+  body {
+    margin: 0;
+
+    /* Первый экран — кадр, поэтому фон страницы пока с рампы KV, а не
+       с --bg темы. Контентные блоки красятся data-theme. */
+    background: var(--deep);
+    color: var(--sky);
+
+    font-family: var(--font-primary);
+    font-size: var(--p-lg);
+    font-weight: var(--weight-regular);
+    line-height: var(--lh-text);
+    letter-spacing: var(--ls-text-lg);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Заголовок по умолчанию: medium, капслок, свой интерлиньяж и
+     трекинг, вертикальный trim. Тег без класса уже выглядит уровнем,
+     а .u-text-style-* нужен там, где уровень разметки и уровень
+     оформления не совпадают. */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    margin: 0;
+    font-weight: var(--weight-medium);
+    text-transform: uppercase;
+    text-wrap: balance;
+    text-box-trim: trim-both;
+    text-box-edge: cap alphabetic;
+  }
+
+  h1 {
+    font-size: var(--h-3xl);
+    line-height: var(--lh-h1);
+    letter-spacing: var(--ls-h1);
+  }
+  h2 {
+    font-size: var(--h-2xl);
+    line-height: var(--lh-h2);
+    letter-spacing: var(--ls-h2);
+  }
+  h3 {
+    font-size: var(--h-xl);
+    line-height: var(--lh-h3);
+    letter-spacing: var(--ls-h3);
+  }
+  h4 {
+    font-size: var(--h-lg);
+    line-height: var(--lh-h4);
+    letter-spacing: var(--ls-h4);
+  }
+  h5 {
+    font-size: var(--h-md);
+    line-height: var(--lh-h5);
+    letter-spacing: var(--ls-h5);
+  }
+  h6 {
+    font-size: var(--h-sm);
+    line-height: var(--lh-h6);
+    letter-spacing: var(--ls-h6);
+  }
+
+  /* Абзац идёт полужирным: на тёмном фоне и мелких кеглях regular расплывается,
+     а вся мелочь первого экрана набрана именно им. Вес — токеном, не числом. */
+  p {
+    margin: 0 0 0.75em;
+    font-weight: var(--weight-semibold);
+    text-wrap: pretty;
+    text-box-trim: trim-both;
+    text-box-edge: cap alphabetic;
+  }
+
+  a {
+    color: inherit;
+  }
+
+  /* Фокус видимый всегда: точки-легенды доступны с клавиатуры (ТЗ 2.10) */
+  :focus-visible {
+    outline: 2px solid var(--white);
+    outline-offset: 3px;
+  }
+}

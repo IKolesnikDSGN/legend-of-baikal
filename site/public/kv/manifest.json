@@ -1,0 +1,87 @@
+{
+  "canvas": {
+    "width": 5056,
+    "height": 3392,
+    "aspect": 1.490566
+  },
+  "visibleFrame": {
+    "w": 0.82,
+    "h": 0.77
+  },
+  "crops": {
+    "fullbleed": 1.6,
+    "letterbox": 2.8
+  },
+  "planeBreaks": [
+    0.11,
+    0.3
+  ],
+  "planeParallax": {
+    "p1": 1.0,
+    "p2": 0.45,
+    "p3": 0.0
+  },
+  "travel": {
+    "camera_y": 0.08,
+    "mouse_x": 0.015,
+    "depth_bend": 0.02
+  },
+  "blurRadius": 0.015,
+  "plateWidths": [
+    2560,
+    1600,
+    1024
+  ],
+  "fogFormat": "webp",
+  "cropWidths": [
+    2880,
+    1920,
+    1440
+  ],
+  "formats": [
+    "avif",
+    "webp"
+  ],
+  "legendWidths": [
+    1600,
+    1024
+  ],
+  "legends": [
+    {
+      "id": "lighthouse",
+      "title": "Легенда о путеводном свете",
+      "object": "фонарь маяка",
+      "placeholder": false
+    },
+    {
+      "id": "railway",
+      "title": "Легенда о железной нити",
+      "object": "огни на насыпи",
+      "placeholder": false
+    },
+    {
+      "id": "factory",
+      "title": "Завод Legend of Baikal",
+      "object": "ангар на пирсе",
+      "placeholder": false
+    },
+    {
+      "id": "epishura",
+      "title": "Легенда о невидимом страже",
+      "object": "открытая вода",
+      "placeholder": false
+    },
+    {
+      "id": "bell",
+      "title": "Легенда о звоне над водой",
+      "object": "купол церкви",
+      "placeholder": false
+    },
+    {
+      "id": "ice-road",
+      "title": "Легенда о зимней дороге",
+      "object": "катер у причала",
+      "placeholder": false
+    }
+  ]
+}

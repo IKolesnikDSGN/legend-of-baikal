@@ -1,0 +1,59 @@
+/* 1. Theme — семантический слой. Три темы переключаются атрибутом
+   data-theme на любом узле, не только на <html>: блок внутри страницы
+   может быть brand или accent, вложенность работает сама собой.
+
+   light  — по умолчанию (бумага)
+   brand  — тёмно-синий блок
+   accent — коралловый блок
+
+   Компоненты используют ТОЛЬКО эти имена. Прямая ссылка на примитив
+   в компоненте означает, что элемент не переживёт смену темы.
+
+   --fg-highlights один во всех трёх темах: это выворотка поверх
+   изображения и подсветка внутри тёмных блоков, ей не с чем спорить. */
+:root,
+[data-theme='light'] {
+  --bg: var(--paper);
+  --surface: var(--white);
+  --fg: var(--dark-blue);
+  --fg-highlights: var(--white);
+  --muted: var(--dark-blue-500);
+  --muted-secondary: var(--dark-blue-300);
+  --muted-tertiary: var(--dark-blue-100);
+  --border: var(--dark-blue);
+  --accent: var(--coral-800);
+  --accent-contrast: var(--paper);
+}
+
+[data-theme='brand'] {
+  --bg: var(--dark-blue);
+  --surface: var(--white-50);
+  --fg: var(--paper);
+  --fg-highlights: var(--white);
+  --muted: var(--white-400);
+  --muted-secondary: var(--white-300);
+  --muted-tertiary: var(--white-100);
+  --border: var(--paper);
+  --accent: var(--coral);
+  --accent-contrast: var(--dark-blue);
+}
+
+[data-theme='accent'] {
+  --bg: var(--coral-500);
+  --surface: var(--dark-blue-50);
+  --fg: var(--dark-blue);
+  --fg-highlights: var(--white);
+  --muted: var(--dark-blue-500);
+  --muted-secondary: var(--dark-blue-300);
+  --muted-tertiary: var(--dark-blue-100);
+  --border: var(--dark-blue);
+  --accent: var(--paper);
+  --accent-contrast: var(--dark-blue);
+}
+
+/* Тема, поставленная на узел, сразу красит его. Иначе каждый блок
+   пришлось бы дублировать парой background/color руками. */
+[data-theme] {
+  background-color: var(--bg);
+  color: var(--fg);
+}

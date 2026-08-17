@@ -1,0 +1,34 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import Territory from '../components/Territory.astro';
+import Competition from '../components/Competition.astro';
+import Voting from '../components/Voting.astro';
+import Project from '../components/Project.astro';
+import Footer from '../components/Footer.astro';
+
+/**
+ * Выключатель первого экрана — на время правок блоков страницы. `HERO = false`
+ * снимает всё, что он держит: экран входа, мастер-кадр, пин, ленту легенд и
+ * перекрытие (атрибут `data-hero-overlap` ставит `hero/scroll.ts`, поэтому
+ * «О территории» сама встаёт в поток первой). Плавная прокрутка при этом
+ * остаётся: Lenis живёт в лейауте, а не в сцене. `npm run check` и
+ * `check:legends` при выключенной сцене не проходят — им нечего мерить.
+ */
+const HERO = true;
+---
+
+<Base
+  title="Легенда озера Байкал"
+  description="Шесть легенд байкальского берега: маяк, Кругобайкальская дорога, эпишура, звон над водой и зимняя ледовая дорога."
+>
+  {HERO && <Hero />}
+  <Territory />
+  <Competition />
+  <Voting />
+  <Project />
+  {/* Футер живёт на странице, а не в Base: внутренних страниц ещё нет, а его
+      ссылки уже написаны абсолютными (`/#territory`) — переезд в лейаут будет
+      одной строкой, когда страницы появятся. */}
+  <Footer />
+</Base>

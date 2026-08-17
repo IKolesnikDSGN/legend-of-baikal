@@ -1,0 +1,386 @@
+/* Утилиты. Один класс — одно свойство, значение всегда токен.
+
+   Файл подключается в слой utilities (см. global.css). Слой, а не
+   !important: утилита обязана бить базовые стили тега, но не обязана
+   быть неотменяемой — в слоях порядок решает всё, специфичность
+   не участвует, и `.card .title` больше не перебивает `.u-text-main`.
+
+   Числа в утилитах нет ни одного. Появилась нужда в отступе, которого
+   нет в шкале, — это правка шкалы, а не класс с пикселями.            */
+
+/* ─────────────────────────────────────────────── Текстовые стили
+
+   Композит: кегль + интерлиньяж + трекинг + вертикальный trim.
+   Порознь их не назначают — кегль без своего интерлиньяжа даёт
+   заголовок, разъехавшийся по высоте строк.
+
+   trim срезает полупустые поля шрифта сверху и снизу, чтобы блок
+   текста вставал по кап-высоте и базовой линии — ровно как в Figma
+   с включённым vertical trim. Браузеры без поддержки правило
+   игнорируют, и текст просто стоит как раньше.                        */
+.u-text-style-display,
+.u-text-style-h1,
+.u-text-style-h2,
+.u-text-style-h3,
+.u-text-style-h4,
+.u-text-style-h5,
+.u-text-style-h6,
+.u-text-style-text-xl,
+.u-text-style-text-lg,
+.u-text-style-text-md,
+.u-text-style-text-sm,
+.u-text-style-eyebrow-md,
+.u-text-style-eyebrow-sm,
+.u-text-style-eyebrow-xs {
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
+}
+
+.u-text-style-display {
+  font-size: var(--h-4xl);
+  line-height: var(--lh-display);
+  letter-spacing: var(--ls-display);
+  font-weight: var(--weight-medium);
+  text-transform: uppercase;
+}
+.u-text-style-h1 {
+  font-size: var(--h-3xl);
+  line-height: var(--lh-h1);
+  letter-spacing: var(--ls-h1);
+  font-weight: var(--weight-medium);
+  text-transform: uppercase;
+}
+.u-text-style-h2 {
+  font-size: var(--h-2xl);
+  line-height: var(--lh-h2);
+  letter-spacing: var(--ls-h2);
+  font-weight: var(--weight-medium);
+  text-transform: uppercase;
+}
+.u-text-style-h3 {
+  font-size: var(--h-xl);
+  line-height: var(--lh-h3);
+  letter-spacing: var(--ls-h3);
+  font-weight: var(--weight-medium);
+  text-transform: uppercase;
+}
+.u-text-style-h4 {
+  font-size: var(--h-lg);
+  line-height: var(--lh-h4);
+  letter-spacing: var(--ls-h4);
+  font-weight: var(--weight-medium);
+  text-transform: uppercase;
+}
+.u-text-style-h5 {
+  font-size: var(--h-md);
+  line-height: var(--lh-h5);
+  letter-spacing: var(--ls-h5);
+  font-weight: var(--weight-medium);
+  text-transform: uppercase;
+}
+.u-text-style-h6 {
+  font-size: var(--h-sm);
+  line-height: var(--lh-h6);
+  letter-spacing: var(--ls-h6);
+  font-weight: var(--weight-medium);
+  text-transform: uppercase;
+}
+
+.u-text-style-text-xl {
+  font-size: var(--p-xl);
+  line-height: var(--lh-text);
+  letter-spacing: var(--ls-text);
+  font-weight: var(--weight-regular);
+}
+.u-text-style-text-lg {
+  font-size: var(--p-lg);
+  line-height: var(--lh-text);
+  letter-spacing: var(--ls-text-lg);
+  font-weight: var(--weight-regular);
+}
+.u-text-style-text-md {
+  font-size: var(--p-md);
+  line-height: var(--lh-text);
+  letter-spacing: var(--ls-text);
+  font-weight: var(--weight-regular);
+}
+.u-text-style-text-sm {
+  font-size: var(--p-sm);
+  line-height: var(--lh-text);
+  letter-spacing: var(--ls-text);
+  font-weight: var(--weight-regular);
+}
+
+.u-text-style-eyebrow-md,
+.u-text-style-eyebrow-sm,
+.u-text-style-eyebrow-xs {
+  line-height: var(--lh-eyebrow);
+  letter-spacing: var(--ls-eyebrow);
+  font-weight: var(--weight-medium);
+  text-transform: uppercase;
+}
+.u-text-style-eyebrow-md { font-size: var(--e-md); }
+.u-text-style-eyebrow-sm { font-size: var(--e-sm); }
+.u-text-style-eyebrow-xs { font-size: var(--e-xs); }
+
+/* ─────────────────────────────────────────────── Вес и регистр */
+.u-weight-regular { font-weight: var(--weight-regular); }
+.u-weight-medium { font-weight: var(--weight-medium); }
+.u-weight-semibold { font-weight: var(--weight-semibold); }
+
+.u-transform-uppercase { text-transform: uppercase; }
+.u-transform-lowercase { text-transform: lowercase; }
+.u-transform-capitalize { text-transform: capitalize; }
+.u-transform-none { text-transform: none; }
+
+/* ─────────────────────────────────────────────── Выключка */
+.u-alignment-left { text-align: left; }
+.u-alignment-center { text-align: center; }
+.u-alignment-right { text-align: right; }
+.u-alignment-justify { text-align: justify; }
+
+/* ─────────────────────────────────────────────── Цвет
+
+   Имена повторяют токены темы один в один, поэтому класс всегда
+   называется так же, как переменная под ним, и искать нечего.        */
+.u-text-main { color: var(--fg); }
+.u-text-highlights { color: var(--fg-highlights); }
+.u-text-muted { color: var(--muted); }
+.u-text-secondary { color: var(--muted-secondary); }
+.u-text-tertiary { color: var(--muted-tertiary); }
+.u-text-accent { color: var(--accent); }
+
+.u-bg-main { background-color: var(--bg); }
+.u-bg-surface { background-color: var(--surface); }
+/* Акцентная подложка сразу тянет за собой контрастный текст: коралл
+   с тёмно-синим — пара, и разводить их по двум классам значит однажды
+   поставить только один. */
+.u-bg-accent {
+  background-color: var(--accent);
+  color: var(--accent-contrast);
+}
+
+/* ─────────────────────────────────────────────── Скругление */
+.u-radius-sm { border-radius: var(--radius-sm); }
+.u-radius-md { border-radius: var(--radius-md); }
+.u-radius-pill { border-radius: var(--radius-pill); }
+
+/* ─────────────────────────────────────────────── Поля страницы */
+/* Колонка страницы: поля --margin и потолок --page-max, дальше блок стоит по
+   центру. Ограничение здесь, а не у каждого блока своим числом: разные потолки
+   в соседних секциях видно как ступеньку по краю страницы. */
+.u-container {
+  max-inline-size: var(--page-max);
+  margin-inline: auto;
+  padding-inline: var(--margin);
+}
+/* Вытащить блок за поля: работает только прямым потомком контейнера. */
+.u-bleed { margin-inline: var(--anti-margin); }
+
+/* ─────────────────────────────────────────────── Отступы секции
+
+   Вертикальный ритм страницы идёт только этими шестью ступенями.
+   none нужен явный: секция без отступа — это решение, а не отсутствие
+   класса, и в разметке это должно быть видно.                        */
+.u-spacer-top-none { padding-block-start: var(--section-none); }
+.u-spacer-top-even { padding-block-start: var(--section-even); }
+.u-spacer-top-sm { padding-block-start: var(--section-sm); }
+.u-spacer-top-md { padding-block-start: var(--section-md); }
+.u-spacer-top-lg { padding-block-start: var(--section-lg); }
+.u-spacer-top-pt { padding-block-start: var(--section-pt); }
+
+.u-spacer-btm-none { padding-block-end: var(--section-none); }
+.u-spacer-btm-even { padding-block-end: var(--section-even); }
+.u-spacer-btm-sm { padding-block-end: var(--section-sm); }
+.u-spacer-btm-md { padding-block-end: var(--section-md); }
+.u-spacer-btm-lg { padding-block-end: var(--section-lg); }
+.u-spacer-btm-pt { padding-block-end: var(--section-pt); }
+
+/* ─────────────────────────────────────────────── Внутренние отступы */
+.u-padding-3xs { padding: var(--space-3xs); }
+.u-padding-2xs { padding: var(--space-2xs); }
+.u-padding-xs { padding: var(--space-xs); }
+.u-padding-md { padding: var(--space-md); }
+.u-padding-lg { padding: var(--space-lg); }
+.u-padding-xl { padding: var(--space-xl); }
+.u-padding-2xl { padding: var(--space-2xl); }
+.u-padding-3xl { padding: var(--space-3xl); }
+.u-padding-4xl { padding: var(--space-4xl); }
+.u-padding-5xl { padding: var(--space-5xl); }
+.u-padding-6xl { padding: var(--space-6xl); }
+.u-padding-7xl { padding: var(--space-7xl); }
+.u-padding-8xl { padding: var(--space-8xl); }
+.u-padding-9xl { padding: var(--space-9xl); }
+.u-padding-10xl { padding: var(--space-10xl); }
+
+.u-padding-inline-3xs { padding-inline: var(--space-3xs); }
+.u-padding-inline-2xs { padding-inline: var(--space-2xs); }
+.u-padding-inline-xs { padding-inline: var(--space-xs); }
+.u-padding-inline-md { padding-inline: var(--space-md); }
+.u-padding-inline-lg { padding-inline: var(--space-lg); }
+.u-padding-inline-xl { padding-inline: var(--space-xl); }
+.u-padding-inline-2xl { padding-inline: var(--space-2xl); }
+.u-padding-inline-3xl { padding-inline: var(--space-3xl); }
+.u-padding-inline-4xl { padding-inline: var(--space-4xl); }
+.u-padding-inline-5xl { padding-inline: var(--space-5xl); }
+.u-padding-inline-6xl { padding-inline: var(--space-6xl); }
+.u-padding-inline-7xl { padding-inline: var(--space-7xl); }
+.u-padding-inline-8xl { padding-inline: var(--space-8xl); }
+.u-padding-inline-9xl { padding-inline: var(--space-9xl); }
+.u-padding-inline-10xl { padding-inline: var(--space-10xl); }
+
+.u-padding-block-3xs { padding-block: var(--space-3xs); }
+.u-padding-block-2xs { padding-block: var(--space-2xs); }
+.u-padding-block-xs { padding-block: var(--space-xs); }
+.u-padding-block-md { padding-block: var(--space-md); }
+.u-padding-block-lg { padding-block: var(--space-lg); }
+.u-padding-block-xl { padding-block: var(--space-xl); }
+.u-padding-block-2xl { padding-block: var(--space-2xl); }
+.u-padding-block-3xl { padding-block: var(--space-3xl); }
+.u-padding-block-4xl { padding-block: var(--space-4xl); }
+.u-padding-block-5xl { padding-block: var(--space-5xl); }
+.u-padding-block-6xl { padding-block: var(--space-6xl); }
+.u-padding-block-7xl { padding-block: var(--space-7xl); }
+.u-padding-block-8xl { padding-block: var(--space-8xl); }
+.u-padding-block-9xl { padding-block: var(--space-9xl); }
+.u-padding-block-10xl { padding-block: var(--space-10xl); }
+
+/* ─────────────────────────────────────────────── Промежутки */
+.u-gap-3xs { gap: var(--space-3xs); }
+.u-gap-2xs { gap: var(--space-2xs); }
+.u-gap-xs { gap: var(--space-xs); }
+.u-gap-md { gap: var(--space-md); }
+.u-gap-lg { gap: var(--space-lg); }
+.u-gap-xl { gap: var(--space-xl); }
+.u-gap-2xl { gap: var(--space-2xl); }
+.u-gap-3xl { gap: var(--space-3xl); }
+.u-gap-4xl { gap: var(--space-4xl); }
+.u-gap-5xl { gap: var(--space-5xl); }
+.u-gap-6xl { gap: var(--space-6xl); }
+.u-gap-7xl { gap: var(--space-7xl); }
+.u-gap-8xl { gap: var(--space-8xl); }
+.u-gap-9xl { gap: var(--space-9xl); }
+.u-gap-10xl { gap: var(--space-10xl); }
+
+.u-gap-row-3xs { row-gap: var(--space-3xs); }
+.u-gap-row-2xs { row-gap: var(--space-2xs); }
+.u-gap-row-xs { row-gap: var(--space-xs); }
+.u-gap-row-md { row-gap: var(--space-md); }
+.u-gap-row-lg { row-gap: var(--space-lg); }
+.u-gap-row-xl { row-gap: var(--space-xl); }
+.u-gap-row-2xl { row-gap: var(--space-2xl); }
+.u-gap-row-3xl { row-gap: var(--space-3xl); }
+.u-gap-row-4xl { row-gap: var(--space-4xl); }
+.u-gap-row-5xl { row-gap: var(--space-5xl); }
+.u-gap-row-6xl { row-gap: var(--space-6xl); }
+.u-gap-row-7xl { row-gap: var(--space-7xl); }
+.u-gap-row-8xl { row-gap: var(--space-8xl); }
+.u-gap-row-9xl { row-gap: var(--space-9xl); }
+.u-gap-row-10xl { row-gap: var(--space-10xl); }
+
+.u-gap-col-3xs { column-gap: var(--space-3xs); }
+.u-gap-col-2xs { column-gap: var(--space-2xs); }
+.u-gap-col-xs { column-gap: var(--space-xs); }
+.u-gap-col-md { column-gap: var(--space-md); }
+.u-gap-col-lg { column-gap: var(--space-lg); }
+.u-gap-col-xl { column-gap: var(--space-xl); }
+.u-gap-col-2xl { column-gap: var(--space-2xl); }
+.u-gap-col-3xl { column-gap: var(--space-3xl); }
+.u-gap-col-4xl { column-gap: var(--space-4xl); }
+.u-gap-col-5xl { column-gap: var(--space-5xl); }
+.u-gap-col-6xl { column-gap: var(--space-6xl); }
+.u-gap-col-7xl { column-gap: var(--space-7xl); }
+.u-gap-col-8xl { column-gap: var(--space-8xl); }
+.u-gap-col-9xl { column-gap: var(--space-9xl); }
+.u-gap-col-10xl { column-gap: var(--space-10xl); }
+
+/* ─────────────────────────────────────────────── Сетка
+
+   Двенадцать колонок на всех ширинах, межколонник — --gutter из
+   section.css, то есть 8 / 16 / 24 по брейкпойнтам. minmax(0, 1fr)
+   вместо 1fr: иначе длинное слово или картинка распирают колонку
+   шире её доли, и вся сетка съезжает вправо.                          */
+.u-grid-12 {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--gutter);
+}
+
+.u-col-span-1 { grid-column: span 1; }
+.u-col-span-2 { grid-column: span 2; }
+.u-col-span-3 { grid-column: span 3; }
+.u-col-span-4 { grid-column: span 4; }
+.u-col-span-5 { grid-column: span 5; }
+.u-col-span-6 { grid-column: span 6; }
+.u-col-span-7 { grid-column: span 7; }
+.u-col-span-8 { grid-column: span 8; }
+.u-col-span-9 { grid-column: span 9; }
+.u-col-span-10 { grid-column: span 10; }
+.u-col-span-11 { grid-column: span 11; }
+.u-col-span-12 { grid-column: span 12; }
+
+.u-col-start-1 { grid-column-start: 1; }
+.u-col-start-2 { grid-column-start: 2; }
+.u-col-start-3 { grid-column-start: 3; }
+.u-col-start-4 { grid-column-start: 4; }
+.u-col-start-5 { grid-column-start: 5; }
+.u-col-start-6 { grid-column-start: 6; }
+.u-col-start-7 { grid-column-start: 7; }
+.u-col-start-8 { grid-column-start: 8; }
+.u-col-start-9 { grid-column-start: 9; }
+.u-col-start-10 { grid-column-start: 10; }
+.u-col-start-11 { grid-column-start: 11; }
+.u-col-start-12 { grid-column-start: 12; }
+
+.u-row-start-1 { grid-row-start: 1; }
+.u-row-start-2 { grid-row-start: 2; }
+.u-row-start-3 { grid-row-start: 3; }
+.u-row-start-4 { grid-row-start: 4; }
+.u-row-start-5 { grid-row-start: 5; }
+.u-row-start-6 { grid-row-start: 6; }
+
+.u-row-span-1 { grid-row: span 1; }
+.u-row-span-2 { grid-row: span 2; }
+.u-row-span-3 { grid-row: span 3; }
+.u-row-span-4 { grid-row: span 4; }
+.u-row-span-5 { grid-row: span 5; }
+.u-row-span-6 { grid-row: span 6; }
+
+/* ─────────────────────────────────────────────── Флекс
+
+   u-align/u-justify без раскладки не делают ничего, поэтому режим
+   лежит рядом, а не «где-нибудь у компонента».                       */
+.u-flex {
+  display: flex;
+}
+.u-flex-col {
+  display: flex;
+  flex-direction: column;
+}
+.u-flex-wrap { flex-wrap: wrap; }
+
+.u-align-start { align-items: start; }
+.u-align-center { align-items: center; }
+.u-align-end { align-items: end; }
+.u-align-stretch { align-items: stretch; }
+.u-align-baseline { align-items: baseline; }
+
+.u-justify-start { justify-content: start; }
+.u-justify-center { justify-content: center; }
+.u-justify-end { justify-content: end; }
+.u-justify-between { justify-content: space-between; }
+.u-justify-around { justify-content: space-around; }
+.u-justify-evenly { justify-content: space-evenly; }
+
+/* ─────────────────────────────────────────────── Служебные */
+.visually-hidden,
+.u-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
