@@ -10,47 +10,16 @@
  * не кладётся). Вернуть рендеры пайплайна — `PHOTOS = false`: в компонентах
  * рядом с заглушкой стоит прежнее выражение с манифестом, оно никуда не делось.
  *
- * Придёт съёмка территории — этот файл, `scripts/placeholders.mjs` и папка
- * `public/placeholder/` удаляются целиком, а `src`/`srcset` компонентов уходят
- * на настоящие кадры.
+ * Съёмка территории уже пришла: в «О территории» стоит видео с дрона, и его
+ * заглушка (`PANORAMA`) отсюда ушла вместе с файлом. Остальное ждёт своей —
+ * когда придёт и она, этот файл, `scripts/placeholders.mjs` и папка
+ * `public/placeholder/` удаляются целиком.
  */
 
 /** Показывать фотографии-заглушки. `false` — вернуться к рендерам пайплайна. */
 export const PHOTOS = true;
 
 export const photo = (name: string) => `/placeholder/${name}.jpg`;
-
-/**
- * Ключевые объекты «О территории»: ключ — `shot` объекта (он же id легенды,
- * рендер которой стоял здесь раньше), значение — файл заглушки. Кадры подобраны
- * по смыслу названия: рельсы у воды, причал в тумане, лодка, деревянный дом,
- * открытая вода с камышом.
- */
-export const OBJECT_PHOTOS: Record<string, string> = {
-  railway: 'railway-shore',
-  factory: 'pier-mist',
-  'ice-road': 'boat-water',
-  bell: 'wood-facade',
-  epishura: 'reeds-lake',
-};
-
-/**
- * Коллаж сцены «О территории»: те же шесть плашек, что и раньше, ключ — id
- * легенды. Кадры намеренно разные: на одинаковых не видно ни затухания
- * очередью, ни раскрытия клипом.
- */
-export const STORY_PHOTOS: Record<string, string> = {
-  lighthouse: 'surf-rock',
-  railway: 'forest-railway',
-  factory: 'cliff-forest',
-  epishura: 'waves',
-  bell: 'fog-alley',
-  'ice-road': 'snow-mountains',
-};
-
-/** Панорама блока и портретный кадр закрывающей мысли. */
-export const PANORAMA = 'panorama';
-export const CLOSING = 'gorge';
 
 /**
  * Голосование: два портретных кадра по бокам от набора и широкий под ним.

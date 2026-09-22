@@ -29,8 +29,8 @@ export type Point = {
   object?: string;
   canvas: [number, number];
   depth?: number;
+  /** проценты кропа: кроп в пайплайне один, fullbleed 1.6:1 */
   fullbleed: [number, number];
-  letterbox: [number, number];
 };
 
 /** Фазы сценария (ТЗ 1.5). Одна маска, разные роли. */

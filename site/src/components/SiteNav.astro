@@ -1,0 +1,160 @@
+---
+/**
+ * Меню сайта. Один компонент на оба хедера — первый экран и фиксированную
+ * полосу после скролла: разметка и раскрытие обязаны быть одни, иначе «второй
+ * вариант» разъедется с первым на первой же правке структуры.
+ *
+ * Пункт с разделами раскрывается по наведению и по фокусу. Раскрытие — чистый
+ * CSS (`:hover`, `:focus-within`), скрипта у меню нет вовсе: по Tab панель
+ * открывается тем же правилом, что и мышью, а без JS и при
+ * `prefers-reduced-motion` меню остаётся рабочим.
+ *
+ * Между пунктом и панелью нет щели, и это условие: щель рвёт наведение — курсор
+ * по дороге к ссылке выходит из пункта, и панель закрывается под рукой. Держит
+ * её `padding-block` самого пункта — панель стоит по его нижней кромке, то есть
+ * внутри той же области наведения.
+ *
+ * Состав меню — `lib/nav.ts`. Здесь только его показ.
+ */
+import { NAV } from '../lib/nav';
+---
+
+<nav class="nav" aria-label="Разделы сайта">
+  <ul class="nav__list">
+    {NAV.map((item) => (
+      <li class="nav__item">
+        <a class="nav__link u-text-style-text-sm u-transform-uppercase u-weight-semibold" href={item.href}>
+          {item.text}
+        </a>
+        {item.links && (
+          <div class="nav__panel" data-theme="light">
+            <ul class="nav__sub">
+              {item.links.map((l) => (
+                <li>
+                  <a class="nav__sub-link u-text-style-text-sm u-weight-regular" href={l.href}>
+                    {l.text}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </li>
+    ))}
+  </ul>
+</nav>
+
+<style>
+  /* Слой первого экрана указателя не ловит (`.hero__ui`), и ссылкам он
+     возвращается поштучно. Меню обязано ловить его целиком: панель — это не
+     ссылка, и без этого курсор, идущий по её полю от пункта к пункту, выпадал
+     бы из наведения между строками. */
+  .nav {
+    pointer-events: auto;
+  }
+
+  .nav__list,
+  .nav__sub {
+    display: flex;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .nav__list {
+    gap: var(--space-lg);
+    align-items: center;
+  }
+
+  /* Контекст для панели и её область наведения разом: панель стоит по нижней
+     кромке пункта, а отбивка сверху и снизу делает эту кромку достижимой без
+     разрыва наведения. */
+  .nav__item {
+    position: relative;
+    padding-block: var(--space-2xs);
+  }
+
+  .nav__link {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  /* Панель — бумажная, как карточка легенды и мини-плашка: она лежит поверх
+     кадра и поверх блоков любой темы, и цвет текста обязан приходить не от
+     темы хозяина, а от своей. Отсюда `data-theme` на самом узле. */
+  /* Ширина — по содержимому, а не по пункту: у абсолютного блока ширина
+     считается от своего контейнера, то есть от самой узкой ссылки меню, и
+     каждый раздел ломался бы на две-три строки (замер: панель 161 px при
+     потолке в 34 знака). Потолок остаётся мерой строки. */
+  .nav__panel {
+    position: absolute;
+    inset-block-start: 100%;
+    inset-inline-start: 0;
+    z-index: 2;
+    inline-size: max-content;
+    max-inline-size: 34ch;
+    padding: var(--space-md);
+    border: 1px solid var(--border);
+    opacity: 0;
+    visibility: hidden;
+    translate: 0 calc(var(--space-2xs) * -1);
+    transition:
+      opacity 0.2s var(--ease),
+      translate 0.2s var(--ease),
+      visibility 0s linear 0.2s;
+  }
+
+  .nav__item:hover > .nav__panel,
+  .nav__item:focus-within > .nav__panel {
+    opacity: 1;
+    visibility: visible;
+    translate: 0 0;
+    transition-delay: 0s;
+  }
+
+  /* Колонкой, а не строкой: это оглавление будущей страницы, и порядок в нём
+     читается сверху вниз. Мера — на самих ссылках: `ch` считается по кеглю
+     элемента, и на обёртке набранной крупнее она дала бы другую ширину. */
+  .nav__sub {
+    flex-direction: column;
+    gap: var(--space-xs);
+  }
+
+  .nav__sub-link {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .nav__sub-link:hover,
+  .nav__sub-link:focus-visible {
+    text-decoration: underline;
+    text-underline-offset: 0.3em;
+  }
+
+  /* Тёмная копия текста под маской первого экрана — клон этого же узла
+     (`hero/textmask.ts`), и наведения она не получает никогда: клон `inert`.
+     Значит её панель всегда закрыта, а открытая панель оригинала висела бы над
+     дырой одним цветом. Панель бумажная и в контрасте маски не нуждается —
+     в копии её просто нет. */
+  :global([data-hero-ui-hole]) .nav__panel {
+    display: none;
+  }
+
+  /* Наведения на узком экране нет вовсе, а четыре длинных пункта в строку туда
+     и не встают: там остаются леттеринг и CTA, а разделы — в футере. Порог тот
+     же, что у всей страницы. */
+  @media (max-width: 900px) {
+    .nav {
+      display: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .nav__panel {
+      transition-duration: 0.01ms;
+    }
+  }
+</style>

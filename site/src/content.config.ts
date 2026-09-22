@@ -14,8 +14,6 @@ const legends = defineCollection({
     title: z.string(),
     /** одна-две строки для мини-карточки при наведении (ТЗ 1.4) */
     teaser: z.string(),
-    /** фактологическая часть полной карточки */
-    fact: z.string(),
     /** объект кадра, на котором сидит точка — для aria-label и сверки с конфигом */
     object: z.string(),
     order: z.number(),

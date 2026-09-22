@@ -1,20 +1,19 @@
 {
   "canvas": {
-    "width": 5056,
-    "height": 3392,
-    "aspect": 1.490566
+    "width": 6189,
+    "height": 4121,
+    "aspect": 1.50182
   },
   "visibleFrame": {
     "w": 0.82,
     "h": 0.77
   },
   "crops": {
-    "fullbleed": 1.6,
-    "letterbox": 2.8
+    "fullbleed": 1.6
   },
   "planeBreaks": [
-    0.11,
-    0.3
+    0.05,
+    0.55
   ],
   "planeParallax": {
     "p1": 1.0,
@@ -75,12 +74,6 @@
       "id": "bell",
       "title": "Легенда о звоне над водой",
       "object": "купол церкви",
-      "placeholder": false
-    },
-    {
-      "id": "ice-road",
-      "title": "Легенда о зимней дороге",
-      "object": "катер у причала",
       "placeholder": false
     }
   ]

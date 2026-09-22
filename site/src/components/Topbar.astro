@@ -1,0 +1,137 @@
+---
+/**
+ * Второй вариант хедера — фиксированная полоса, которая приходит после скролла.
+ *
+ * Первый вариант живёт в первом экране: он лежит на кадре, без фона, и уходит
+ * вместе со сценой. Дальше страница идёт блоками разных тем, и меню обязано
+ * остаться доступным — отсюда вторая полоса: тот же состав (леттеринг, меню,
+ * CTA), но со своим фоном и всегда на экране.
+ *
+ * Состав и раскрытие берутся из общего меню (`SiteNav`), а не пишутся заново:
+ * два списка разделов разъехались бы на первой же правке структуры.
+ *
+ * Появление считает `IntersectionObserver`, а не слушатель скролла: рядом с
+ * Lenis он был бы вторым и на каждый кадр. Метка — вся страница под сценой
+ * (`[data-below-hero]` в разметке страницы), корень сжат полями до линии под
+ * верхней кромкой экрана: полоса приходит ровно тогда, когда содержимое под
+ * сценой доезжает до этой линии, и уходит на отмотке обратно в сцену. Метка
+ * высотой во всю страницу, а не в пиксель: пиксельную метку быстрый скролл
+ * проскакивает между кадрами, и команда не приходит вовсе.
+ *
+ * Тема brand: это та же подпись проекта, что на первом экране, и коралловая CTA
+ * на тёмно-синем — та же пара. На светлых блоках полоса читается сама собой, на
+ * тёмных её отбивает нижняя линия.
+ */
+import SiteNav from './SiteNav.astro';
+import { CTA, WORDMARK } from '../lib/nav';
+---
+
+<header class="topbar" data-topbar data-theme="brand">
+  <div class="topbar__in u-container">
+    <a class="topbar__logo u-text-style-h6" href="/">{WORDMARK}</a>
+    {/* Меню лежит в своей обёртке, и она не убирается вместе с ним: на узком
+        экране сам список скрыт, но дорожка сетки обязана остаться — иначе CTA
+        уезжает в среднюю дорожку и налезает на леттеринг (замер на 390: кнопка
+        встала на 130 px при леттеринге до 170). */}
+    <div class="topbar__nav">
+      <SiteNav />
+    </div>
+    <a
+      class="topbar__cta u-text-style-text-sm u-transform-uppercase u-weight-semibold u-bg-accent u-radius-sm"
+      href={CTA.href}
+    >
+      {CTA.text}
+    </a>
+  </div>
+</header>
+
+<script>
+  /* Флаг на узле обязателен: `astro:page-load` приходит и на первой загрузке
+     тоже, и без него на одной полосе поднялось бы два наблюдателя. */
+  const setup = () => {
+    const bar = document.querySelector<HTMLElement>('[data-topbar]');
+    const mark = document.querySelector<HTMLElement>('[data-below-hero]');
+    if (!bar || !mark || bar.dataset.on) return;
+    bar.dataset.on = '';
+
+    const io = new IntersectionObserver(
+      ([e]) => {
+        bar.toggleAttribute('data-shown', e.isIntersecting);
+      },
+      /* Корень сжат до линии под верхней кромкой: −10% сверху и −90% снизу
+         сводят его в одну высоту, и пересечение начинается ровно там, где
+         страница под сценой доехала до этой линии. Доля живёт один раз — второй
+         кромки у этого решения нет. */
+      { rootMargin: '-10% 0px -90% 0px' },
+    );
+    io.observe(mark);
+  };
+
+  setup();
+  document.addEventListener('astro:page-load', setup);
+</script>
+
+<style>
+  /* Над всем, что рисует страница: под полосой проходит и кадр первого экрана,
+     и бумажные панели блоков. */
+  .topbar {
+    position: fixed;
+    inset-block-start: 0;
+    inset-inline: 0;
+    z-index: 10;
+    border-block-end: 1px solid var(--border);
+    /* Уходит вверх за кромку, а не просто гаснет: полоса приезжает сверху тем
+       же движением, каким страница идёт вниз. Видимость снимается в конце —
+       иначе невидимая полоса продолжает ловить курсор поверх содержимого. */
+    translate: 0 -100%;
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      translate 0.35s var(--ease),
+      opacity 0.35s var(--ease),
+      visibility 0s linear 0.35s;
+  }
+
+  .topbar[data-shown] {
+    translate: 0 0;
+    opacity: 1;
+    visibility: visible;
+    transition-delay: 0s;
+  }
+
+  /* Та же сетка, что у хедера первого экрана: леттеринг слева, меню по центру,
+     CTA справа. Боковые дорожки равные — `minmax(0, 1fr)`, иначе длинное меню
+     растянуло бы свою дорожку и сдвинуло центр молча. */
+  .topbar__in {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    align-items: center;
+    gap: var(--gutter);
+    padding-block: var(--space-2xs);
+  }
+
+  .topbar__logo {
+    justify-self: start;
+    margin: 0;
+    color: inherit;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .topbar__nav {
+    justify-self: center;
+  }
+
+  .topbar__cta {
+    justify-self: end;
+    padding: var(--space-2xs) var(--space-md);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .topbar {
+      transition-duration: 0.01ms;
+    }
+  }
+</style>

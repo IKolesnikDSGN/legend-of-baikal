@@ -8,6 +8,9 @@
  */
 import { getCollection, render } from 'astro:content';
 
+import SiteNav from './SiteNav.astro';
+import { CTA, WORDMARK } from '../lib/nav';
+
 const entries = (await getCollection('legends')).sort((a, b) => a.data.order - b.data.order);
 const legends = await Promise.all(
   entries.map(async (e) => ({ id: e.id, data: e.data, Body: (await render(e)).Content })),
@@ -65,23 +68,21 @@ const teasers = Object.fromEntries(legends.map((l) => [l.id, l.data.teaser]));
         красится вторым цветом, поэтому в разметке блок ровно один и разъехаться
         двум версиям текста негде. */}
     <div class="hero__ui u-container" data-hero-ui>
+      {/* Состав хедера из ТЗ: леттеринг, разделы, основная CTA. Меню — общий
+          компонент: те же пункты и то же раскрытие по наведению стоят в
+          фиксированной полосе, которая приходит после сцены. */}
       <header class="hero__bar">
-        <a
-          class="hero__menu u-text-style-text-sm u-transform-uppercase u-weight-semibold"
-          href="#territory"
-          data-anim
-          style="--i: 0"
-        >
-          Меню
-        </a>
-        <p class="u-text-style-h6" data-anim style="--i: 1">Legend of Baikal</p>
+        <p class="hero__logo u-text-style-h6" data-anim style="--i: 0">{WORDMARK}</p>
+        <div class="hero__nav" data-anim style="--i: 1">
+          <SiteNav />
+        </div>
         <a
           class="hero__cta u-text-style-text-sm u-transform-uppercase u-weight-semibold u-bg-accent u-radius-sm"
-          href="/apply"
+          href={CTA.href}
           data-anim
           style="--i: 2"
         >
-          Подать заявку
+          {CTA.text}
         </a>
       </header>
 
@@ -90,20 +91,22 @@ const teasers = Object.fromEntries(legends.map((l) => [l.id, l.data.teaser]));
             дизайнерские, те же, что были <br>. Порядок входа — --i в разметке,
             как у карточек легенд: элементов ровно столько, сколько видно. */}
         <h1 class="u-text-style-h1 u-alignment-center">
-          <span class="line" style="--i: 3">В соавторстве</span>
-          <span class="line" style="--i: 4">с берегом</span>
+          <span class="line" style="--i: 3">У берега есть</span>
+          <span class="line" style="--i: 4">своя история</span>
         </h1>
         <hr class="rule hero__rule" data-anim style="--i: 5" />
+        {/* Три слота под дивайдером, как в макете: «слева», «по центру», «справа».
+            Тексты — из ТЗ, расположение прежнее. */}
         <div class="hero__notes">
           <p class="hero__note u-text-style-text-sm u-weight-semibold">
-            <span class="line" style="--i: 6">У каждого берега есть история.</span>
-            <span class="line" style="--i: 7">У этого — должно появиться будущее</span>
+            <span class="line" style="--i: 6">За туманом скрываются истории природы, мест и событий.</span>
+            <span class="line" style="--i: 7">Исследуйте карту и соберите все легенды</span>
           </p>
           <p class="hero__note u-text-style-text-sm u-alignment-center u-weight-semibold">
-            <span class="line" style="--i: 6">Молодые архитекторы со всей России создают пространство,</span>
-            <span class="line" style="--i: 7">которое продолжит легенду Порта Байкал</span>
+            <span class="line" style="--i: 6">Молодые российские архитекторы</span>
+            <span class="line" style="--i: 7">продолжат легенду Порта Байкал</span>
           </p>
-          <a class="hero__about u-text-style-text-sm u-weight-semibold" href="#about" data-anim style="--i: 8">
+          <a class="hero__about u-text-style-text-sm u-weight-semibold u-text-accent" href="#about" data-anim style="--i: 8">
             О конкурсе
             <svg class="hero__arrow" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
               <path d="M2 8h11M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.3" />
@@ -112,8 +115,11 @@ const teasers = Object.fromEntries(legends.map((l) => [l.id, l.data.teaser]));
         </div>
       </div>
 
-      <p class="hero__scroll u-text-style-text-sm u-text-secondary u-weight-semibold" data-anim style="--i: 9">
-        Листайте вниз
+      {/* Подпись к самой карте легенд стоит по нижней кромке кадра — на месте
+          прежнего «Листайте вниз»: «исследуйте карту» относится ровно к тому,
+          что под курсором, и вторая подсказка рядом читалась бы дублем. */}
+      <p class="hero__map u-text-style-text-sm u-weight-semibold" data-anim style="--i: 9">
+        Открой легенды Порта Байкал
       </p>
     </div>
 
@@ -150,17 +156,15 @@ const teasers = Object.fromEntries(legends.map((l) => [l.id, l.data.teaser]));
             {l.data.title}
           </h2>
           <hr class="rule card__rule" data-anim style="--i: 2" />
-          {/* Легенда и факт — две колонки одной сетки, как в макете: рассказ
-              слева, фактология справа. */}
-          <div class="card__cols">
-            <div class="card__body u-text-style-text-sm" data-anim style="--i: 3"><l.Body /></div>
-            <p class="card__fact u-text-style-text-sm" data-anim style="--i: 4">{l.data.fact}</p>
-          </div>
+          {/* Текст легенды идёт одной колонкой — ровно тем, что дал заказчик.
+              Второй колонки с фактологией здесь больше нет: её тексты были
+              написаны на время вёрстки, а в ТЗ легенда — сплошной рассказ. */}
+          <div class="card__body u-text-style-text-md" data-anim style="--i: 3"><l.Body /></div>
           <a
             class="card__more u-text-style-text-sm u-weight-semibold"
             href={`/legends/${l.id}`}
             data-anim
-            style="--i: 5"
+            style="--i: 4"
           >
             Подробнее
           </a>
@@ -296,35 +300,51 @@ const teasers = Object.fromEntries(legends.map((l) => [l.id, l.data.teaser]));
   }
 
   /* Кнопка в копии остаётся акцентной: коралл читается и на кальке, и на
-     открытом кадре, менять ему цвет не за чем. */
+     открытом кадре, менять ему цвет не за чем. То же у ссылки «О конкурсе»:
+     цвет копии задаётся правилом компонента и бьёт утилиту, поэтому акцент ей
+     возвращается здесь — иначе в дыре она уходила бы в цвет фона. */
   [data-hero-ui-hole] .hero__cta {
     color: var(--accent-contrast);
+  }
+
+  [data-hero-ui-hole] .hero__about {
+    color: var(--accent);
   }
 
   [data-hero-ui-hole] .hero__rule {
     background: var(--bg);
   }
 
+  /* Леттеринг слева, меню по центру, CTA справа. Боковые дорожки равные, и
+     именно `minmax(0, …)`: у `1fr` минимум равен min-content, и длинный пункт
+     меню растянул бы свою дорожку, сдвинув центр молча и ровно на разницу. */
+  /* Свой слой поверх остального текста экрана: строки заголовка идут анимацией
+     по `transform`, и браузер держит их отдельным композиторским слоем — без
+     явного z-index у хедера раскрытая панель меню оказывается под буквами. */
   .hero__bar {
+    position: relative;
+    z-index: 2;
     display: grid;
-    grid-template-columns: 1fr auto 1fr;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
     align-items: center;
+    gap: var(--gutter);
   }
 
-  .hero__bar p {
-    margin: 0;
-    text-align: center;
-  }
-
-  .hero__menu {
+  .hero__logo {
     justify-self: start;
-    text-decoration: none;
+    margin: 0;
+    white-space: nowrap;
+  }
+
+  .hero__nav {
+    justify-self: center;
   }
 
   .hero__cta {
     justify-self: end;
     padding: var(--space-xs) var(--space-md);
     text-decoration: none;
+    white-space: nowrap;
   }
 
   .hero__intro {
@@ -375,7 +395,10 @@ const teasers = Object.fromEntries(legends.map((l) => [l.id, l.data.teaser]));
     flex: none;
   }
 
-  .hero__scroll {
+  /* Подпись к карте стоит по нижней кромке кадра: `auto` сверху съедает весь
+     остаток высоты, поэтому между заголовком и ею лежит свободное поле кадра —
+     то самое, в котором ходят метки. */
+  .hero__map {
     margin: auto 0 0;
     text-align: center;
   }
@@ -651,10 +674,17 @@ const teasers = Object.fromEntries(legends.map((l) => [l.id, l.data.teaser]));
      небольшой и идёт от середины кадра в обе стороны: прокрутка обязана что-то
      двигать, но карточка при этом стоит по центру, а не отмеряется от края.
 
-     Высота фиксированная и от контента не зависит: карточки шести легенд
-     разной длины, и подстройка под каждую превращала бы смену легенды в
-     подскок панели. Число — самая высокая карточка плюс запас: контент внутри
-     раскладывается сеткой, а не распирает её. */
+     Высота фиксированная и от контента не зависит: карточки пяти легенд разной
+     длины, и подстройка под каждую превращала бы смену легенды в подскок
+     панели. Число — самая высокая карточка плюс запас: контент внутри
+     раскладывается сеткой, а не распирает её.
+
+     Пересчитано под кегль абзаца на ступень крупнее (заказчик: текст легенды
+     мелкий): замер самой высокой карточки дал 524 px на 901, 496 на 1100, 502
+     на 1440 и 568 на 1920. Зависимость немонотонная — на узком карточка уже,
+     зато на широком крупнее и кегль, и вся шкала отступов, — поэтому до 1440
+     держит пол, а прямая догоняет только на последнем отрезке. Прежние 464–496
+     были посчитаны под мелкий кегль и обрезали бы теперь epishura. */
   .card {
     position: absolute;
     right: 0;
@@ -663,7 +693,7 @@ const teasers = Object.fromEntries(legends.map((l) => [l.id, l.data.teaser]));
     display: grid;
     grid-template-rows: auto auto auto 1fr auto;
     inline-size: 100%;
-    block-size: clamp(34rem, calc(20.5rem + 15vw), 38.5rem);
+    block-size: clamp(33.5rem, calc(25.25rem + 9.1667vw), 36.25rem);
     padding: var(--space-md);
     opacity: 0;
     /* --out: ход финала. Карточка уезжает вверх вместе со своим кадром — на
@@ -762,9 +792,8 @@ const teasers = Object.fromEntries(legends.map((l) => [l.id, l.data.teaser]));
   /* Текст легенды идёт regular: полужирный абзац базового слоя набран под
      мелочь на тумане, а здесь бумажная панель и длинный текст.
 
-     Выключка по формату — общая для всей страницы: две колонки карточки стоят
-     рядом, и рваные правые края у обеих читаются дырой между ними. Последняя
-     строка остаётся по левому краю сама. */
+     Выключка по формату — общая для всей страницы. Последняя строка остаётся
+     по левому краю сама, это дефолт `justify`. */
   .card__body :global(p) {
     margin: 0 0 var(--space-md);
     font-weight: var(--weight-regular);
@@ -773,18 +802,6 @@ const teasers = Object.fromEntries(legends.map((l) => [l.id, l.data.teaser]));
 
   .card__body :global(p:last-child) {
     margin-block-end: 0;
-  }
-
-  .card__cols {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--gutter);
-  }
-
-  .card__fact {
-    margin: 0;
-    font-weight: var(--weight-regular);
-    text-align: justify;
   }
 
   /* Кнопка тёмная, а не акцентная: коралл в карточке спорил бы с метками на
@@ -899,6 +916,23 @@ const teasers = Object.fromEntries(legends.map((l) => [l.id, l.data.teaser]));
   }
 
   @media (max-width: 900px) {
+    /* Три подписи в строку на узком экране слипаются: у левой в колонке остаётся
+       по два слова (замер на 390: десять строк вместо двух). Ложатся стопкой и все
+       по центру — под центрированным заголовком они и есть его подписи, а по
+       левому краю блок распался бы на центрированный верх и левый низ. Выключку
+       из утилит перебивает правило компонента: оно вне слоёв. */
+    .hero__notes {
+      grid-template-columns: minmax(0, 1fr);
+      row-gap: var(--space-md);
+      justify-items: center;
+    }
+
+    .hero__note,
+    .hero__about {
+      justify-self: center;
+      text-align: center;
+    }
+
     /* ТЗ 1.9: пин отключается, карточка едет снизу на всю ширину */
     .cards {
       inset: auto var(--margin) var(--margin) var(--margin);

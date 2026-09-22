@@ -77,14 +77,13 @@ const activeCard = await page.evaluate(() => document.querySelector('.card.is-ac
 const info = await page.evaluate(() => ({
   hits: document.querySelectorAll('.hero__hit').length,
   cards: document.querySelectorAll('[data-legend-card]').length,
-  // страница под сценой: панели объектов территории, факты конкурса и состояние
-  // блока голосования — по ним видно, что секции собрались и скрипт их поднял
-  territoryObjects: document.querySelectorAll('#territory .obj').length,
+  // страница под сценой: факты конкурса — по ним видно, что секция собралась.
+  // Ленты ключевых объектов в «О территории» больше нет (блок сведён к составу
+  // ТЗ), блоков голосования и «О проекте» — тоже: заказчик снял их с главной,
+  // вёрстка лежит в `site/backup/components/`.
   competitionFacts: document.querySelectorAll('#about .fact').length,
-  votingState: document.querySelector('[data-voting]')?.dataset.state,
-  votingShown: Array.from(document.querySelectorAll('[data-voting-panel]'))
-    .filter((p) => !p.hidden)
-    .map((p) => p.dataset.votingPanel),
+  // фиксированный хедер: показан он или нет в текущей точке прокрутки
+  topbar: document.querySelector('[data-topbar]')?.hasAttribute('data-shown'),
   scrollHeight: document.body.scrollHeight,
 }));
 
