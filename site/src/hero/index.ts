@@ -8,6 +8,7 @@
 
 import { Blob } from './blob';
 import { detect, probe, type Caps } from './caps';
+import { Field } from './field';
 import { initFallback } from './fallback';
 import { initGate, type Gate } from './gate';
 import { Points } from './points';
@@ -166,6 +167,18 @@ export async function mount(root: HTMLElement) {
     }
   }
 
+  // ── свободное поле кадра ─────────────────────────────────────────────────
+  // Полоса между текстом первого экрана и подписью к карте. В неё сцена
+  // опускает кадр, и в ней же держится мини-плашка: обе меряют одно и то же
+  // место одним объектом — два замера одного поля разъехались бы.
+  const intro = root.querySelector<HTMLElement>('.hero__intro');
+  const map = root.querySelector<HTMLElement>('.hero__map');
+  const field = intro && map ? new Field(intro, map) : null;
+  if (field) {
+    scene.setField(field);
+    dom.setField(field);
+  }
+
   // ── счётчик собранных легенд ─────────────────────────────────────────────
   // Точки слетаются в него на раскрытии; место сцена спрашивает у плашки, а не
   // считает — она стоит по общей колонке страницы.
@@ -199,6 +212,12 @@ export async function mount(root: HTMLElement) {
 
   const onResize = () => {
     scene.resize();
+    if (field) {
+      // Поле пересчитывается на resize, а не в кадре: его держит раскладка
+      // страницы, а она меняется только вместе с шириной окна.
+      field.measure();
+      dom.setField(field);
+    }
     textMask?.resize(window.innerWidth, window.innerHeight);
     if (tally) {
       tally.resize(scene.dotPx);

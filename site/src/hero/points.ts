@@ -7,13 +7,25 @@
  * один раз в процентах нельзя, параллакс её увезёт от огня.
  */
 
+import type { Field } from './field';
 import { state, type Point } from './state';
+
+/**
+ * Отбивка плашки: от метки и от кромок свободного поля. Одно число на оба
+ * случая — плашка, отодвинутая от метки на 1.5rem и прижатая к тексту вплотную,
+ * читалась бы приклеенной к чужой строке.
+ */
+const CARD_GAP = 1.5;
 
 export type Hit = { point: Point; el: HTMLButtonElement };
 
 export class Points {
   hits: Hit[] = [];
   private card: HTMLElement;
+  /** свободное поле кадра: за его кромки плашка не выходит — см. `cardY` */
+  private field: Field | null = null;
+  /** отбивка в пикселях; rem меняется только с корневым кеглем, то есть на resize */
+  private gap = 0;
   /** отложенное `hidden`: ждёт, пока доиграет затухание */
   private hide: ReturnType<typeof setTimeout> | undefined;
 
@@ -82,6 +94,32 @@ export class Points {
     }, 200);
   }
 
+  /**
+   * Свободное поле кадра — то же, по которому сцена опускает сам кадр
+   * (`field.ts`). Плашка обязана держаться его так же, как метка: она выходит
+   * из метки вверх на полвысоты, и у верхних легенд это ровно строка подписей.
+   */
+  setField(field: Field) {
+    this.field = field;
+    this.gap = CARD_GAP * parseFloat(getComputedStyle(document.documentElement).fontSize);
+  }
+
+  /**
+   * Где стоит середина плашки. Метка задаёт её, поле — поправляет: у маяка и
+   * церкви плашка иначе легла бы на подписи первого экрана (замер на 1280×720:
+   * верх плашки на 199 при тексте до 268). Сдвиг вниз, а не смена стороны:
+   * плашка встаёт сбоку от метки, и уход вниз оставляет её у той же метки.
+   */
+  private cardY(y: number, h: number): number {
+    if (!this.field) return y;
+    const half = this.card.offsetHeight / 2;
+    const lo = this.field.top * h + half + this.gap;
+    const hi = this.field.bottom * h - half - this.gap;
+    // Поле уже самой плашки бывает только на совсем низком окне: там она
+    // встаёт по его середине — ближе к метке её всё равно не поставить.
+    return hi < lo ? (lo + hi) / 2 : Math.min(Math.max(y, lo), hi);
+  }
+
   /** Точка под курсором — берётся из состояния, а не из hit-теста: hover уже дал DOM. */
   hovered(): Point | null {
     return this.points.find((p) => p.id === state.hover) ?? null;
@@ -104,11 +142,12 @@ export class Points {
       el.style.transform = `translate3d(${(x * w).toFixed(1)}px, ${(y * h).toFixed(1)}px, 0) translate(-50%, -50%)`;
       el.style.visibility = off ? 'hidden' : 'visible';
       if (state.hover === point.id && !this.card.hidden) {
-        // мини-карточка встаёт со стороны, где есть место
+        // мини-карточка встаёт со стороны, где есть место, и внутри поля кадра
         const right = x < 0.62;
+        const side = right ? `${CARD_GAP}rem` : `calc(-100% - ${CARD_GAP}rem)`;
         this.card.style.transform =
-          `translate3d(${(x * w).toFixed(1)}px, ${(y * h).toFixed(1)}px, 0) ` +
-          `translate(${right ? '1.5rem' : 'calc(-100% - 1.5rem)'}, -50%)`;
+          `translate3d(${(x * w).toFixed(1)}px, ${this.cardY(y * h, h).toFixed(1)}px, 0) ` +
+          `translate(${side}, -50%)`;
       }
     }
   }
